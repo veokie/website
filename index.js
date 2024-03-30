@@ -196,6 +196,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Function to generate WhatsApp link
+
 function createWhatsAppLink(phoneNumber) {
   return `https://api.whatsapp.com/send?phone=${phoneNumber}`;
 }
@@ -210,22 +211,29 @@ app.get('/adduser', isAuthenticated, (req, res) => {
 
 // Route to handle adding a new user
 app.post('/adduser', async (req, res) => {
-  const { id, type, name, messengerLink, phoneNumber } = req.body;
+  const { id, type, name, messengerLink, phoneNumber, wsPhone } = req.body;
 
   if (!type || !name || !phoneNumber) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
-  const phoneAppLink = createWhatsAppLink(phoneNumber); // Generate WhatsApp link
+  let wsLink = null; // Initialize wsLink as null
+
+  if (wsPhone) {
+    wsLink = createWhatsAppLink(wsPhone); // Generate WhatsApp link for wsPhone
+  }
+
+  const phoneAppLink = createWhatsAppLink(phoneNumber); // Generate WhatsApp link for phoneNumber
 
   try {
     const newUser = new User({
       type,
       id,
       name,
-      phoneAppLink,
+      phoneAppLink, // WhatsApp link for phoneNumber
       messengerLink,
-      phoneNumber
+      phoneNumber,
+      wsLink, // WhatsApp link for wsPhone or null if wsPhone is not provided
     });
 
     const savedUser = await newUser.save();
@@ -235,6 +243,7 @@ app.post('/adduser', async (req, res) => {
     res.status(500).json({ message: 'Error adding user to MongoDB' });
   }
 });
+
 
 // Route to delete a user from MongoDB
 // Route to delete a user from MongoDB based on phone number and type
@@ -278,7 +287,8 @@ const userSchema = new mongoose.Schema({
   name: String,
   phoneNumber: String,
   phoneAppLink: String,
-  messengerLink: String
+  messengerLink: String,
+  wsLink: String
 }, { collection: 'users' });
 
 const User = mongoose.model('User', userSchema);
@@ -389,7 +399,7 @@ function generateTableRows(users) {
           <td style="width: 15%"><a href="${user.phoneAppLink}" target="_blank"><img src="images/ws.png" alt="WhatsApp" style="max-width: 30px; max-height: 30px;"></a></td>
           <td style="width: 15%"><a href="${user.messengerLink}" target="_blank"><img src="https://i.ibb.co/QKPB6CQ/pngwing-com-31.png" alt="msg" style="max-width: 30px; max-height: 30px;"></a></td>
           <td style="width: 25%">${user.phoneNumber}</td>
-          <td style="width: 15%"><a href="${user.phoneAppLink}"</a>Complain</td>
+          <td style="width: 10%"><a href="${user.wsLink}" target="_blank"><img src="images/ws.png" alt="WhatsApp" style="max-width: 30px; max-height: 30px;"></a></td>
         </tr>
       `;
     } else {
