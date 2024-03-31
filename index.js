@@ -395,7 +395,7 @@ function generateTableRows(users) {
         <tr>
           <td style="width: 13%">${user.type}</td>
           <td style="width: 7%">${user.id}</td>
-          <td style="width: 25%">${user.name}</td>
+          <td style="width: 25%"><span style="font-size: larger; font-weight: bold;">${user.name}</span></td>
           <td style="width: 15%"><a href="${user.phoneAppLink}" target="_blank"><img src="images/ws.png" alt="WhatsApp" style="max-width: 30px; max-height: 30px;"></a></td>
           <td style="width: 15%"><a href="${user.messengerLink}" target="_blank"><img src="https://i.ibb.co/QKPB6CQ/pngwing-com-31.png" alt="msg" style="max-width: 30px; max-height: 30px;"></a></td>
           <td style="width: 25%">${user.phoneNumber}</td>
@@ -408,7 +408,7 @@ function generateTableRows(users) {
         <tr>
           <td style="width: 13%">${user.type}</td>
           <td style="width: 7%">${user.id}</td>
-          <td style="width: 25%">${user.name}</td>
+          <td style="width: 25%"><span style="font-size: larger; font-weight: bold;">${user.name}</span></td>
           <td style="width: 15%"><a href="${user.phoneAppLink}" target="_blank"><img src="images/ws.png" alt="WhatsApp" style="max-width: 30px; max-height: 30px;"></a></td>
           <td style="width: 15%"><a href="${user.messengerLink}" target="_blank"><img src="https://i.ibb.co/QKPB6CQ/pngwing-com-31.png" alt="msg" style="max-width: 30px; max-height: 30px;"></a></td>
           <td style="width: 25%">${user.phoneNumber}</td>
